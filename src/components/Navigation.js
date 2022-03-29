@@ -1,29 +1,65 @@
 import React from 'react';
-import {NavLink} from "react-router-dom";
+import {NavLink, useHistory} from "react-router-dom";
 import './Navigation.css';
 
-const Navigation = () => {
+const Navigation = ({isAuth, toggleAuth}) => {
+
+    const history = useHistory();
+
+    function signOut() {
+        toggleAuth(false);
+        history.push('/')
+    }
+
     return (
         <nav>
-            <ul className="navigation">
+            <ul>
                 <li>
                     <NavLink to="/">
                         Home
                     </NavLink>
                 </li>
-                <li>
-                    <NavLink to="/blogposts">
-                        Blogposts
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to="/login">
-                        Login
-                    </NavLink>
-                </li>
+                {/*Is de gebruiker ingelogd? Laat dan de blogposts en uitlog knop zien, en anders alleen de login knop */}
+                {isAuth === true
+                    ? <>
+                        <li>
+                            <NavLink to="/blogposts">
+                                Blogposts
+                            </NavLink>
+                        </li>
+                        <li>
+                            <button type="button" onClick={signOut}>
+                                Uitloggen
+                            </button>
+                        </li>
+                    </>
+                    :
+                    <li>
+                        <NavLink to="/login">
+                            Login
+                        </NavLink>
+                    </li>}
             </ul>
         </nav>
     );
-};
+}
+
+    {/*        <NavLink to="/blogposts">*/}
+    {/*            Blogposts*/}
+    {/*        </NavLink>*/}
+    {/*    </li>*/}
+    {/*<li>*/}
+    {/*    <NavLink to="/login">*/}
+    {/*        Login*/}
+    {/*    </NavLink>*/}
+    {/*</li>*/}
+
+
+
+
+
+
+
 
 export default Navigation;
+

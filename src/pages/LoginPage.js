@@ -5,22 +5,22 @@ const LoginPage = ({toggleAuth}) => {
 
     const history = useHistory();
 
-    function nextPage () {
-        history.push("/blogposts");
-        toggleAuth(true);
+    function signIn () {
+           toggleAuth(true);
+        history.push("/");
     }
 
     return (
-        <div>
+        <section>
             <h1>Login pagina</h1>
             <p>Druk op de knop om je in te loggen!</p>
             <button
                 type="button"
-                onClick={nextPage}
+                onClick={signIn}
             >
                 Inloggen
             </button>
-        </div>
+        </section>
     );
 };
 

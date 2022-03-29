@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import {Switch, Route} from "react-router-dom";
+import {Switch, Route, Redirect} from "react-router-dom";
 import Navigation from "./components/Navigation";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -18,6 +18,15 @@ import BlogpostPage from "./pages/BlogpostPage";
 // 8. Haal via useParams de juiste blog binnen in BlogpostPage en geef deze weer op de pagina
 // 9.
 
+function PrivateRoute({ children, isAuth, ...rest}) {
+    // omdat we nog steeds alle mogelijke properties zoals exact etc. op Route willen zetten, kunnen we met de ...rest operator zeggen:
+    // al die andere props die je verder nog ontvangt, zet die ook allemaal maar op <Route>
+    return (
+        <Route {...rest}>
+            {isAuth ? children : <Redirect to="/login" />}
+        </Route>
+    )
+}
 
 function App() {
   // We houden in de state bij of iemand is "ingelogd" (simpele versie)
@@ -25,7 +34,7 @@ function App() {
 
   return (
       <>
-          <Navigation />
+          <Navigation isAuth={isAuthenticated} toggleAuth={toggleIsAuthenticated} />
 
         <Switch>
             <Route exact path="/">
@@ -37,12 +46,12 @@ function App() {
                 toggleAuth={toggleIsAuthenticated}
                 />
             </Route>
-            <Route exact path="/blogposts">
+            <PrivateRoute exact path="/blogposts" isAuth={isAuthenticated}>
                 <BlogOverviewPage />
-            </Route>
-            <Route path="/blogposts/:blogId">
+            </PrivateRoute>
+            <PrivateRoute exact path="/blog/:blogId" isAuth={isAuthenticated}>
                 <BlogpostPage />
-            </Route>
+            </PrivateRoute>
                 </Switch>
       </>
   );
